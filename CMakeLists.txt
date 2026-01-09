@@ -30,7 +30,7 @@ target_link_libraries(game
 
 target_include_directories(game
     PRIVATE
-        ${CMAKE_SOURCE_DIR}/includes
+        ${CMAKE_SOURCE_DIR}/lib
 )
 
 add_custom_command(
