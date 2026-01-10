@@ -23,6 +23,13 @@ Renderer::~Renderer() {
     IMG_Quit();
     TTF_Quit();
 
+    if (m_font)
+        TTF_CloseFont(m_font);
+    m_font = nullptr;
+    if (m_texture)
+        SDL_DestroyTexture(m_texture); // clear m_texture
+    m_texture = nullptr;
+
     SDL_DestroyRenderer(m_renderer);
     SDL_DestroyWindow(m_screen);
 }
@@ -105,6 +112,7 @@ void Renderer::loadPlayAssets() {
 void Renderer::freePlayAssets() {
     if (m_font) 
         TTF_CloseFont(m_font);
+    m_font = nullptr;
 }
 
 void Renderer::renderGrid() const {
@@ -375,6 +383,72 @@ void Renderer::renderPlay(const Board& m_board, const Tetromino& m_tetro, const 
 
     // Show status (level, lines, score)
     renderStatus(level, lines, score);
+
+    // Show modifications
+    SDL_RenderPresent(m_renderer);
+}
+
+
+// ============================= GAMEOVER Functions ========================
+void Renderer::showScore(int score) {
+    // Render text "Your Score"
+    SDL_Color textColor = {29, 53, 87, 255};
+    SDL_Rect textRect = {150, 100, 200, 50};
+    std::string text = "Your Score";
+    SDL_Surface* textSurface = TTF_RenderText_Blended(m_font, text.c_str(), textColor);
+
+    SDL_Texture* textTexture = SDL_CreateTextureFromSurface(m_renderer, textSurface);
+
+    // Text Rectangle
+    int textW, textH;
+    SDL_QueryTexture(textTexture, nullptr, nullptr, &textW, &textH);
+    SDL_Rect tmpRect = {textRect.x + (textRect.w - textW) / 2, textRect.y + (textRect.h - textH) / 2, textW, textH};
+
+    SDL_RenderCopy(m_renderer, textTexture, nullptr, &tmpRect);
+
+      // Draw rectangle
+    SDL_SetRenderDrawColor(m_renderer, 110, 104, 44, 255);
+    tmpRect = {150, 150, 200, 50};
+    SDL_RenderFillRect(m_renderer, &tmpRect);
+
+
+    // Free memory
+    SDL_FreeSurface(textSurface);
+    SDL_DestroyTexture(textTexture);
+
+    textColor = {135, 143, 154, 255};
+    std::string number = std::to_string(score);
+    SDL_Surface* numberSurface = TTF_RenderText_Blended(m_font, number.c_str(), textColor);
+    SDL_Texture* numberTexture = SDL_CreateTextureFromSurface(m_renderer, numberSurface);
+
+    SDL_QueryTexture(numberTexture, nullptr, nullptr, &textW, &textH);
+    SDL_Rect numberRec = {tmpRect.x + (tmpRect.w - textW) / 2, tmpRect.y + (tmpRect.h - textH) / 2, textW, textH};
+
+     SDL_RenderCopy(m_renderer, numberTexture, nullptr, &numberRec);
+
+    // Free memory
+    SDL_FreeSurface(numberSurface);
+    SDL_DestroyTexture(numberTexture);
+}
+
+void Renderer::loadGameOverAssets() {
+    if (!m_font)
+        m_font = TTF_OpenFont(fontPath.c_str(), 40);
+}
+
+void Renderer::freeGameOverAssets() {
+    if (m_font) 
+        TTF_CloseFont(m_font);
+    m_font = nullptr;
+}
+
+void Renderer::renderGameOver(int score) {
+    // background
+    SDL_SetRenderDrawColor(m_renderer, 203, 203, 203, 255);
+    SDL_RenderClear(m_renderer);
+
+    // Draw score board
+    showScore(score);
 
     // Show modifications
     SDL_RenderPresent(m_renderer);

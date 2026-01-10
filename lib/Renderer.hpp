@@ -8,7 +8,6 @@
 #include "Board.hpp"
 #include "Tetromino.hpp"
 #include "config.hpp"
-// #include "Input.hpp"
 
 #include "Button.hpp"
 
@@ -46,5 +45,9 @@ public:
     void renderLines(int);
     void renderStatus(int, int, int); // level, scores, lines
     // when GameState = GAMEOVER
+    void showScore(int);
+    void loadGameOverAssets();
+    void freeGameOverAssets();
+    void renderGameOver(int);
     // void renderGameOver(); 
 };

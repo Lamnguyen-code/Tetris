@@ -118,7 +118,6 @@ bool Game::isLost() const {
     for (int i = 0; i < vec.size(); ++i) {
         if (vec[i].second < 0) {
             std::cout << vec[i].second << "\n";
-            std::cout << "Type: " << m_tetro.getType();
             return true;
         }
     }
@@ -224,12 +223,11 @@ void Game::run() {
             }
 
             case PLAYING_PAUSE:
-                std::cout << "PLAYING_PAUSE\n";
                 break;
             default:
-                std::cout << "GAME OVER\n";
-                int x;
-                ++x;
+                m_renderer.loadGameOverAssets();
+                m_renderer.renderGameOver(m_scores);
+                m_renderer.freeGameOverAssets();
         }
     } 
 }

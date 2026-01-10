@@ -47,7 +47,7 @@ std::vector<std::vector<std::vector<bool>>> Tetromino::shapeMap = {
 Tetromino::Tetromino() {};
 
 Tetromino::Tetromino(int type) {
-    m_x = 4, m_y = -4; // position
+    m_x = 4, m_y = -2; // position
     m_type = type;
     m_matrix = shapeMap[type];
 }

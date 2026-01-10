@@ -32,6 +32,8 @@ void Board::addTetro(const Tetromino& tetro) {
     // Add each cells to grid
     for (int i = 0; i < n; ++i) {
         int x = cellPos[i].first, y = cellPos[i].second;
+        if (y < 0) continue;
+
         m_grid[y][x] = tetro.getType();
     }
 }
