@@ -34,21 +34,24 @@ Thay vì dùng Makefile thủ công, dự án này sử dụng **CMake** để q
 
 ### Bước 1: Tạo thư mục build
 Mở terminal tại thư mục gốc của dự án và chạy:
-'''sh
-mkdir build
-cd build
+```bash
+mkdir build && cd build
+```
 
 ### Bước 2: Cấu hình dự án
 Chạy lệnh sau trong terminal: 
-'''bash
+```bash
 cmake ..
+```
 
 ### Bước 3: Biên dịch dự án 
 Tiếp tục chạy lệnh sau:
-'''bash
+```bash
 cmake --build .
+```
 
 ### Bước 4: Chạy chương trình:
 Sau bước 3, file thực thi game sẽ xuất hiện trong thư mục build. Chạy lệnh:
-'''bash
+```bash
 ./game
+```
