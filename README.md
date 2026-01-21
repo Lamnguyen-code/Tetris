@@ -40,15 +40,15 @@ cd build
 
 ### Bước 2: Cấu hình dự án
 Chạy lệnh sau trong terminal: 
-'''sh
+'''bash
 cmake ..
 
 ### Bước 3: Biên dịch dự án 
 Tiếp tục chạy lệnh sau:
-'''sh
+'''bash
 cmake --build .
 
 ### Bước 4: Chạy chương trình:
 Sau bước 3, file thực thi game sẽ xuất hiện trong thư mục build. Chạy lệnh:
-'''sh
+'''bash
 ./game
