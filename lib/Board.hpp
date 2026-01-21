@@ -15,4 +15,5 @@ public:
     std::vector<int> findCompletedLines() const;
     void clearCompletedLines(const std::vector<int>&);
     int getCellValue(int i, int j) const {return m_grid[i][j];}
+    void reset();
 };

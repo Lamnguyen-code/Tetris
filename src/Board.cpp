@@ -87,3 +87,11 @@ void Board::clearCompletedLines(const std::vector<int>& completedLines) {
         --i;
     }
 }
+
+void Board::reset() {
+    for (int i = 0; i < BOARD_HEIGHT; ++i) {
+        for (int j = 0; j < BOARD_WIDTH; ++j) {
+            m_grid[i][j] = -1;
+        } 
+    }
+}

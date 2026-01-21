@@ -13,7 +13,7 @@ Game::Game() {
     m_level = 1;
     m_lastTime = 0;
     m_timer = 0;
-    m_dropInterval = 1200;
+    m_dropInterval = 1000;
     m_tmpLines = 0;
 
     // initialize next tetrominos
@@ -101,14 +101,14 @@ void Game::dropTetro() {
 }
 
 void Game::checkLevelUp() {
-    if (m_tmpLines >= 12) {
+    if (m_tmpLines >= 10) {
         m_tmpLines = 0;
 
         // uplevel 
         ++m_level;
         
         // decrease drop interval
-        m_dropInterval = std::max(m_dropInterval - 50, 700);
+        m_dropInterval = std::max(m_dropInterval - 100, 100);
     }
 }
 
@@ -117,12 +117,37 @@ bool Game::isLost() const {
 
     for (int i = 0; i < vec.size(); ++i) {
         if (vec[i].second < 0) {
-            std::cout << vec[i].second << "\n";
             return true;
         }
     }
 
     return false;
+}
+
+void Game::resetStatus() {
+    // score
+    m_lines = 0;
+    m_scores = 0;
+
+    // tetromino
+    m_hasTetro = false;
+
+    // timer
+    m_timer = 0;
+    m_dropInterval = 1000;
+
+    // level
+    m_level = 0;
+    m_tmpLines = 0;
+
+    // reset tetrominos
+    m_tetroGenerator.reset();
+    for (int i = 0; i < 3; ++i) {
+        m_nextTetros[i] = m_tetroGenerator.generateTetro();
+
+    // reset board
+    m_board.reset();
+    }
 }
 
 void Game::run() {
@@ -171,7 +196,7 @@ void Game::run() {
                 }
                 
                 // render
-                m_renderer.renderPlay(m_board, m_tetro, m_shadow, m_nextTetros, m_level, m_lines, m_scores);
+                m_renderer.renderPlay(m_board, m_tetro, m_shadow, m_nextTetros, m_level, m_scores, m_lines);
 
                 // check input
                 handlePlayingInput();
@@ -222,12 +247,26 @@ void Game::run() {
                 break;
             }
 
-            case PLAYING_PAUSE:
-                break;
             default:
+                Button replayButton = {150, 285, 200, 50, {76, 176, 88, 255}, {209, 122, 63, 255}, "Replay", 40, {70, 70, 70, 255}};
+                
+                Button exitButton = {150, 405, 200, 50, {76, 176, 88, 255}, {209, 122, 63, 255}, "Exit", 40, {70, 70, 70, 255}};
+
                 m_renderer.loadGameOverAssets();
-                m_renderer.renderGameOver(m_scores);
-                m_renderer.freeGameOverAssets();
+                m_renderer.renderGameOver(m_scores, replayButton, exitButton);
+                
+                // check mouse input
+                m_inpHandler.updateHoveredButton(replayButton);
+                m_inpHandler.updateHoveredButton(exitButton);
+
+                if (m_inpHandler.isClickedButton(replayButton)) {
+                    m_gameState = PLAYING;
+                    m_renderer.freeGameOverAssets();
+                    resetStatus();
+                }
+
+                else if (m_inpHandler.isClickedButton(exitButton))
+                    m_running = false;
         }
     } 
 }

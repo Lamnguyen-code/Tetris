@@ -48,6 +48,6 @@ public:
     void showScore(int);
     void loadGameOverAssets();
     void freeGameOverAssets();
-    void renderGameOver(int);
+    void renderGameOver(int, const Button&, const Button&);
     // void renderGameOver(); 
 };

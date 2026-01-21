@@ -32,4 +32,9 @@ public:
 
         return Tetromino(m_vec[m_curIdx ++]);
     }
+
+    void reset() {
+        m_curIdx = 0;
+        std::shuffle(m_vec.begin(), m_vec.end(), m_rng);
+    }
 };

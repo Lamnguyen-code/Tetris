@@ -42,4 +42,6 @@ public:
     void checkLevelUp();
     bool isLost() const;
     void updateShadow(); // update shadow if m_tetro has modification
+
+    void resetStatus();
 };

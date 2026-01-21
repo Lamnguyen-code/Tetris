@@ -20,9 +20,6 @@ Renderer::Renderer() {
 }
 
 Renderer::~Renderer() {
-    IMG_Quit();
-    TTF_Quit();
-
     if (m_font)
         TTF_CloseFont(m_font);
     m_font = nullptr;
@@ -32,6 +29,9 @@ Renderer::~Renderer() {
 
     SDL_DestroyRenderer(m_renderer);
     SDL_DestroyWindow(m_screen);
+
+    IMG_Quit();
+    TTF_Quit();
 }
 
 void Renderer::drawButton(const Button& button) {
@@ -119,11 +119,11 @@ void Renderer::renderGrid() const {
    
     // Draw board grid
     SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
-    for (int i = 0; i < BOARD_HEIGHT; ++i) { // draw horizontal lines
+    for (int i = 0; i <= BOARD_HEIGHT; ++i) { // draw horizontal lines
         SDL_RenderDrawLine(m_renderer, 30, 50 + i*30, 330, 50 + i*30);
     }
 
-    for (int i = 0; i < BOARD_WIDTH; ++i) { // draw vertical lines
+    for (int i = 0; i <= BOARD_WIDTH; ++i) { // draw vertical lines
         SDL_RenderDrawLine(m_renderer, 30 + 30*i, 50, 30 + 30*i, 650);
     }
 }
@@ -170,7 +170,7 @@ void Renderer::renderNextTetros(const std::vector<Tetromino>& nextTetros) {
     // Render text "Next"
     SDL_Color textColor = {183, 194, 208, 255};
     SDL_Rect nextRect = {355, 80, 120, 40};
-    std::string nextText = "NEXT";
+    std::string nextText = "Next";
     SDL_Surface* nextTextSurface = TTF_RenderText_Blended(m_font, nextText.c_str(), textColor);
 
     SDL_Texture* nextTextTexture = SDL_CreateTextureFromSurface(m_renderer, nextTextSurface);
@@ -227,7 +227,7 @@ void Renderer::renderLevel(int level) {
     // Render text "Level"
     SDL_Color textColor = {183, 194, 208, 255};
     SDL_Rect levelRect = {355, 350, 120, 30};
-    std::string levelText = "LEVEL";
+    std::string levelText = "Level";
     SDL_Surface* levelTextSurface = TTF_RenderText_Blended(m_font, levelText.c_str(), textColor);
 
     SDL_Texture* levelTextTexture = SDL_CreateTextureFromSurface(m_renderer, levelTextSurface);
@@ -300,7 +300,7 @@ void Renderer::renderLines(int lines) {
     // Render text "Lines"
     SDL_Color textColor = {183, 194, 208, 255};
     SDL_Rect linesRect = {355, 530, 120, 30};
-    std::string linesText = "LINES";
+    std::string linesText = "Lines";
     SDL_Surface* linesTextSurface = TTF_RenderText_Blended(m_font, linesText.c_str(), textColor);
 
     SDL_Texture* linesTextTexture = SDL_CreateTextureFromSurface(m_renderer, linesTextSurface);
@@ -392,8 +392,8 @@ void Renderer::renderPlay(const Board& m_board, const Tetromino& m_tetro, const 
 // ============================= GAMEOVER Functions ========================
 void Renderer::showScore(int score) {
     // Render text "Your Score"
-    SDL_Color textColor = {29, 53, 87, 255};
-    SDL_Rect textRect = {150, 100, 200, 50};
+    SDL_Color textColor = {70, 70, 70, 255};
+    SDL_Rect textRect = {150, 135, 200, 50};
     std::string text = "Your Score";
     SDL_Surface* textSurface = TTF_RenderText_Blended(m_font, text.c_str(), textColor);
 
@@ -407,16 +407,16 @@ void Renderer::showScore(int score) {
     SDL_RenderCopy(m_renderer, textTexture, nullptr, &tmpRect);
 
       // Draw rectangle
-    SDL_SetRenderDrawColor(m_renderer, 110, 104, 44, 255);
-    tmpRect = {150, 150, 200, 50};
-    SDL_RenderFillRect(m_renderer, &tmpRect);
-
+    // SDL_SetRenderDrawColor(m_renderer, 76, 176, 88, 255);
+    tmpRect = {150, 185, 200, 50};
+    // SDL_RenderFillRect(m_renderer, &tmpRect);
 
     // Free memory
     SDL_FreeSurface(textSurface);
     SDL_DestroyTexture(textTexture);
 
-    textColor = {135, 143, 154, 255};
+    // Render text into tmpRect
+    textColor = {70, 70, 70, 255};
     std::string number = std::to_string(score);
     SDL_Surface* numberSurface = TTF_RenderText_Blended(m_font, number.c_str(), textColor);
     SDL_Texture* numberTexture = SDL_CreateTextureFromSurface(m_renderer, numberSurface);
@@ -442,14 +442,20 @@ void Renderer::freeGameOverAssets() {
     m_font = nullptr;
 }
 
-void Renderer::renderGameOver(int score) {
+void Renderer::renderGameOver(int score, const Button& replayButton, const Button& exitButton) {
     // background
-    SDL_SetRenderDrawColor(m_renderer, 203, 203, 203, 255);
+    SDL_SetRenderDrawColor(m_renderer, 245, 244, 241, 100);
     SDL_RenderClear(m_renderer);
 
     // Draw score board
     showScore(score);
 
+    // Draw replay button
+    drawButton(replayButton);
+
+    // Draw exit button
+    drawButton(exitButton);
+    
     // Show modifications
     SDL_RenderPresent(m_renderer);
 }
