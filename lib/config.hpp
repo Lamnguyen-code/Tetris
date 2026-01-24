@@ -5,6 +5,9 @@
 // Define font path
 const std::string fontPath = "../assets/Font/Font.ttf";
 
+// Define high scores path
+const std::string scorePath = "../assets/highscores.txt";
+
 // Define size of board (in cells)
 const int BOARD_WIDTH = 10;
 const int BOARD_HEIGHT = 20;
@@ -17,7 +20,6 @@ const int SCREEN_HEIGHT = 700;
 enum GameState {
     INTRO,
     PLAYING,
-    PLAYING_PAUSE,
     GAMEOVER
 };
 

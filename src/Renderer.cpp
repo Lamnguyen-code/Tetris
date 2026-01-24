@@ -88,7 +88,23 @@ void Renderer::freeIntroAssets() {
     m_texture = nullptr;
 }
 
-void Renderer::renderIntro(const Button& playButton) {
+void Renderer::showHighScore(int score, int x, int y) {
+    SDL_Surface* textSurface = TTF_RenderText_Blended(m_font, std::to_string(score).c_str(), {80, 80, 80, 255});
+    SDL_Texture* textTexture = SDL_CreateTextureFromSurface(m_renderer, textSurface);
+    // Text Rectangle
+    int textW, textH;
+
+    SDL_QueryTexture(textTexture, nullptr, nullptr, &textW, &textH);
+    SDL_Rect textRec = {x + (200 - textW) / 2, y + (70 - textH) / 2, textW, textH};
+
+    SDL_RenderCopy(m_renderer, textTexture, nullptr, &textRec);
+
+    // Free memory
+    SDL_FreeSurface(textSurface);
+    SDL_DestroyTexture(textTexture);
+}
+
+void Renderer::renderIntro(const Button& playButton, const std::vector<int>& scores) {
     // SDL_SetRenderDrawColor(m_renderer, 69, 125, 198, 255);
     SDL_SetRenderDrawColor(m_renderer, 255, 255, 255, 255);
     SDL_RenderClear(m_renderer); // clear background
@@ -99,6 +115,45 @@ void Renderer::renderIntro(const Button& playButton) {
 
     // Draw play button
     drawButton(playButton); 
+
+    // Show text "High Score"
+    std::string t = "Best";
+    SDL_Surface* textSurface = TTF_RenderText_Blended(m_font,  t.c_str(), {80, 80, 80, 255});
+    SDL_Texture* textTexture = SDL_CreateTextureFromSurface(m_renderer, textSurface);
+
+    // Text Rectangle
+    int textW, textH;
+
+    int x = 150, y = 230;
+    SDL_QueryTexture(textTexture, nullptr, nullptr, &textW, &textH);
+    SDL_Rect textRec = {x + (200 - textW) / 2, y + (50 - textH) / 2, textW, textH};
+
+    SDL_RenderCopy(m_renderer, textTexture, nullptr, &textRec);
+
+    // Free memory
+    SDL_FreeSurface(textSurface);
+    SDL_DestroyTexture(textTexture);
+
+    SDL_SetRenderDrawColor(m_renderer, 73, 139, 224, 255);
+    SDL_Rect highScoreRect = {150, 290, 200, 350};
+
+    // Fill rect
+    SDL_RenderFillRect(m_renderer, &highScoreRect);
+   
+    SDL_SetRenderDrawColor(m_renderer, 80, 80, 80, 255);
+    // Draw border
+    for (int i = 1; i <= 3; ++i) {
+        SDL_Rect border = {highScoreRect.x - i, highScoreRect.y - i, highScoreRect.w + 2*i, highScoreRect.h + 2*i};
+        SDL_RenderDrawRect(m_renderer, &border);
+    }
+
+    for (int i = 0; i < scores.size(); ++i) {
+        showHighScore(scores[i], 150, 290 + i * 70);
+
+        for (int j = -1; j <= 1; ++j) {
+            SDL_RenderDrawLine(m_renderer, 150, 290 + (i + 1)*70 + j, 350, 290 + (i + 1)*70 + j);
+        }
+    }
 
     SDL_RenderPresent(m_renderer); // display modifications
 }

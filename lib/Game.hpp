@@ -3,9 +3,11 @@
 #include "Board.hpp"
 #include "InputHandler.hpp"
 #include "Renderer.hpp"
+#include "ScoreManager.hpp"
 #include "TetroGenerator.hpp"
 #include "Tetromino.hpp"
 #include "config.hpp"
+#include "ScoreManager.hpp"
 
 class Game {
 private:
@@ -14,6 +16,7 @@ private:
     InputHandler m_inpHandler;
     Tetromino m_fallingTetro;
     GameState m_gameState;
+    ScoreManager m_scoreManager;
 
     bool m_running; // bool variable for game loop
 

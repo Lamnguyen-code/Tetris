@@ -137,7 +137,7 @@ void Game::resetStatus() {
     m_dropInterval = 1000;
 
     // level
-    m_level = 0;
+    m_level = 1;
     m_tmpLines = 0;
 
     // reset tetrominos
@@ -160,11 +160,11 @@ void Game::run() {
         // game logic
         switch(m_gameState) {
             case INTRO: {
-                Button playButton = {150, 118, 200, 80, {76, 176, 88, 255}, {209, 122, 63, 255}, "PLAY", 50, {70, 70, 70, 255}};
+                Button playButton = {150, 118, 200, 80, {76, 176, 88, 255}, {209, 122, 63, 255}, "Play", 50, {70, 70, 70, 255}};
                 // Load assets
                 m_renderer.loadIntroAssets(playButton);
                 // Render intro
-                m_renderer.renderIntro(playButton);
+                m_renderer.renderIntro(playButton, m_scoreManager.getScores());
 
                 // check hover button
                 m_inpHandler.updateHoveredButton(playButton); 
@@ -213,6 +213,7 @@ void Game::run() {
                             m_gameState = GAMEOVER;
                             // free assets
                             m_renderer.freePlayAssets();
+                            m_scoreManager.update(m_scores);
                         }
     
                         // second case, tetro can't move down anymore, so stick it to m_board

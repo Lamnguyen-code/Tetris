@@ -17,6 +17,7 @@ set(SOURCES
     src/Tetromino.cpp
     src/Renderer.cpp
     src/InputHandler.cpp
+    src/ScoreManager.cpp
 )
 
 add_executable(game ${SOURCES})

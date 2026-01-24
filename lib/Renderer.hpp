@@ -28,7 +28,9 @@ public:
     // when GameState = INTRO
     void loadIntroAssets(const Button&);
     void freeIntroAssets();
-    void renderIntro(const Button&); 
+    void renderIntro(const Button&, const std::vector<int>&); 
+    void showHighScore(int, int, int); // score, x, y
+
 
     // when GameState = PLAY
     void loadPlayAssets();
@@ -44,10 +46,11 @@ public:
     void renderScore(int);
     void renderLines(int);
     void renderStatus(int, int, int); // level, scores, lines
+
+    
     // when GameState = GAMEOVER
     void showScore(int);
     void loadGameOverAssets();
     void freeGameOverAssets();
     void renderGameOver(int, const Button&, const Button&);
-    // void renderGameOver(); 
 };
